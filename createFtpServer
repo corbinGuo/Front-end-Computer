@@ -1,0 +1,11 @@
+1、检查centos是否已经安装vsftpd
+rpm-q vsftpd
+如果没有安装使用yum命令安装即可 
+2、配置vsftpd
+将/etc/vsftpd/user_list文件和/etc/vsftpd/ftpusers文件中的root这一行用#注释掉
+执行 setsebool -P ftpd_disable_trans=1
+修改/etc/vsftpd/vsftpd.conf,在最后一行处添加local_root=/
+3、启动vsftpd
+systemctl enable vsftpd.service
+systemctl start vsftpd.service
+
