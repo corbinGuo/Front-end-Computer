@@ -1,0 +1,53 @@
+1、使用下面的命令来验证网络管理器服务的状态：
+
+   $ systemctl status NetworkManager.service
+
+2、运行以下命令来检查受网络管理器管理的网络接口：
+
+   $ nmcli dev status 
+
+   如果某个接口的nmcli的输出结果是“已连接”（如p2p2），这就是说该接口受网络管理器管理。你可以轻易地为某个特定接口禁用网络管理器，以便你可以自己为它配置一个静态IP地址。
+3、进入/etc/sysconfig/network-scripts目录，找到该接口的配置文件（ifcfg-p2p2）。如果没有，创建一个。
+
+4、打开配置文件并编辑以下变量：
+××××××××××××××××××××BEGIN×××××××××××××××××××××
+   BOOTPROTO="static" #dhcp改为static   
+   ONBOOT="yes" #开机启用本配置  
+   IPADDR=192.168.0.60 #静态IP  
+   GATEWAY=192.168.0.1 #默认网关  
+   NETMASK=255.255.255.0 #子网掩码  
+   DNS1=202.102.134.68 #DNS 配置
+--------------------END-----------------------  
+   修改后的文件大致如下：
+××××××××××××××××××××BEGIN×××××××××××××××××××××
+   # ]# cat /etc/sysconfig/network-scripts/ifcfg-p2p2  
+   HWADDR="00:15:5D:07:F1:02"  
+   TYPE="Ethernet"  
+   BOOTPROTO="static" #dhcp改为static   
+   DEFROUTE="yes"  
+   PEERDNS="yes"  
+   PEERROUTES="yes"  
+   IPV4_FAILURE_FATAL="no"  
+   IPV6INIT="yes"  
+   IPV6_AUTOCONF="yes"  
+   IPV6_DEFROUTE="yes"  
+   IPV6_PEERDNS="yes"  
+   IPV6_PEERROUTES="yes"  
+   IPV6_FAILURE_FATAL="no"  
+   NAME="eth0"  
+   UUID="bb3a302d-dc46-461a-881e-d46cafd0eb71"  
+   ONBOOT="yes" #开机启用本配置  
+   IPADDR=192.168.0.60 #静态IP  
+   GATEWAY=192.168.0.1 #默认网关  
+   NETMASK=255.255.255.0 #子网掩码  
+   DNS1=202.102.134.68 #DNS 配置  
+---------------------END----------------------
+5、重启网络
+   service network restart
+   OR
+   systemctl restart network.service
+6  查看改动后的效果
+   ip add
+
+
+
